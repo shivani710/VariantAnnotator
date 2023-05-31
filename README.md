@@ -6,7 +6,7 @@ The Variant Annotator is a sophisticated software tool designed for bioinformati
 
 - [Dependencies](#dependencies)
 - [Features](#Features)
-- [Usage](#InstructionsforUse)
+- [Usage](#Usage)
 - [Detailed Functionality](#DetailedFunctionality)
 - [Output](#output)
 - [FAQs](#faqs)
@@ -36,7 +36,7 @@ This comprehensive toolkit comes with several advanced features that facilitate 
 5. **External API Integration**: It integrates with the Variant Effect Predictor (VEP) REST API to retrieve extensive variant annotations. These annotations significantly enrich the dataset, providing comprehensive insights about each variant.
 
 
-## Instructions for Use
+## Usage
 
 To use the Variant Annotator, follow these steps:
 
