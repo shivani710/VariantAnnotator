@@ -32,9 +32,9 @@ This comprehensive toolkit comes with several advanced features that facilitate 
 
 * Alternatively, in Variant_Annotator_Batch.py, the estimated depth of coverage is calculated using the formula:
 
-**   Read Depth (DP) = TCF + NR
+*   Read Depth (DP) = TCF + NR
 
-**  The Total forward strand coverage (TCF) represents the coverage specifically from the forward strand, while the Total number of reverse reads (NR) represents the coverage from the reverse strand containing the variant. Adding these two values together provides an estimate of the read depth at the given locus.
+*  The Total forward strand coverage (TCF) represents the coverage specifically from the forward strand, while the Total number of reverse reads (NR) represents the coverage from the reverse strand containing the variant. Adding these two values together provides an estimate of the read depth at the given locus.
 
 *   It's important to note that this is an estimation and may not be as accurate as having the actual DP value. The DP value represents the total read depth and is the preferred and more accurate measure when available.
 
