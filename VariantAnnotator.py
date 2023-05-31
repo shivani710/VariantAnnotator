@@ -69,6 +69,7 @@ def annotate_variant(record):
     else: # Some complex variant
         hgvs = "Complex variant, not converted to HGVS"
     variant_id = hgvs
+    print("VariantID is {}".format(variant_id))
     depth_of_coverage = calculate_read_depth(record)
     supporting_reads = int(record.INFO.get('NR', 0)[0])
     reference_reads = int(record.INFO.get('TC', 0))
@@ -79,31 +80,37 @@ def annotate_variant(record):
     
     return [variant_id, depth_of_coverage, supporting_reads, percentage_supporting_reads, variant_type] + annotations
 
-def get_variant_annotations(hgvs):
-    url = f"https://rest.ensembl.org/vep/human/hgvs/{hgvs}?"
+    
+
+def get_variant_annotations(variant_id):
+    url = f"https://rest.ensembl.org/vep/human/hgvs/{variant_id}?"
 
     headers = {
         "Content-Type": "application/json"
     }
-    
+
     response = requests.get(url, headers=headers)
-    response_data = response.json()
-    
-    annotations = []
-    
-    if isinstance(response_data, list) and len(response_data) > 0:
-        variant_data = response_data[0]
-#         print("response data is: {}".format(response_data))
-        gene = variant_data.get('transcript_consequences', [{}])[0].get('gene_symbol', '')
-#         variant_class = variant_data.get('transcript_consequences', [{}])[0].get('biotype', [''])
-        variant_effect = variant_data.get('most_severe_consequence', '')
-        minor_allele_frequency = variant_data.get('gnomad_AF', '')
-        additional_annotations = variant_data.get('colocated_variants', [{}])[0].get('clin_sig', '')
 
-        annotations = [gene, variant_effect, minor_allele_frequency, additional_annotations]
-    
+    try:
+        response_data = response.json()
+        annotations = []
+
+        if isinstance(response_data, list) and len(response_data) > 0:
+            variant_data = response_data[0]
+            # print("response data is: {}".format(response_data))
+            gene = variant_data.get('transcript_consequences', [{}])[0].get('gene_symbol', '')
+            # variant_class = variant_data.get('transcript_consequences', [{}])[0].get('biotype', [''])
+            variant_effect = variant_data.get('most_severe_consequence', '')
+            minor_allele_frequency = variant_data.get('gnomad_AF', '')
+            additional_annotations = variant_data.get('colocated_variants', [{}])[0].get('clin_sig', '')
+
+            annotations = [gene, variant_effect, minor_allele_frequency, additional_annotations]
+
+    except ValueError:
+        print(f"Error decoding JSON for {hgvs}: {response.content}, HTTP status code: {response.status_code}")
+        return []
+
     return annotations
-
 
 def annotate_variants(vcf_file, output_file, delimiter=','):
     """
@@ -119,7 +126,7 @@ def annotate_variants(vcf_file, output_file, delimiter=','):
                           'Variant Type','Gene', 'Variant Effect', 'Minor Allele Frequency', 'Additional Annotations'])
         count=0
         for record in vcf_reader:
-            print(record)
+            #print(record)
             count=count+1
             variant_annotation = annotate_variant(record)
             writer.writerow(variant_annotation)
