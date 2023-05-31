@@ -131,7 +131,4 @@ def annotate_variants(vcf_file, output_file, delimiter=','):
             variant_annotation = annotate_variant(record)
             writer.writerow(variant_annotation)
             print(count)
-#             if count>12:
-                
-#                 break;
 annotate_variants('test_vcf_data.txt', 'AnnotatedVariants.csv', delimiter=',')
