@@ -71,15 +71,15 @@ Please ensure that the input VCF file complies with the standard VCF format and 
 
 The output file contains the following columns:
 
-- `variant`: The identifier of the variant.
-- `depth`: The total read depth at the variant site.
-- `variant_reads`: The number of reads supporting the variant.
-- `variant_percentage`: The percentage of reads supporting the variant.
-- `gene`: The gene where the variant is located.
-- `variant_type`: The type of the variant (substitution, insertion, CNV, etc.).
-- `effect`: The predicted effect of the variant (missense, silent, intergenic, etc.).
-- `maf`: The minor allele frequency of the variant.
-- `additional_info`: Additional information from the VEP annotation, which includes any other details returned by the API.
+- `Variant ID`: The identifier of the variant.
+- `Depth of Sequence Coverage`: The total read depth at the variant site.
+- `Supporting Reads`: The number of reads supporting the variant.
+- `Percentage of Supporting Reads`: The percentage of reads supporting the variant.
+- `Gene`: The gene where the variant is located.
+- `Variant Type`: The type of the variant (substitution, insertion, CNV, etc.).
+- `Variant Effect`: The predicted effect of the variant (missense, silent, intergenic, etc.).
+- `Minor Allele Frequency`: The minor allele frequency of the variant.
+- `Additional Annotations`: Additional information from the VEP annotation, which includes any other details returned by the API.
 
 ## Future Development
 
