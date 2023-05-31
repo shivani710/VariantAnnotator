@@ -21,6 +21,7 @@ The toolkit is developed in Python3 and requires the following Python libraries:
 
 * `pyVCF`: A Python library for parsing and manipulating VCF files.
 * `requests`: A simple HTTP library for Python, built for human beings. It is used for making HTTP requests to the VEP API.
+* `csv`:  A library in Python that provides functionality to both read from and write to CSV files, enabling easy manipulation of tabular data.
 
 ## Features
 
