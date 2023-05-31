@@ -42,6 +42,8 @@ def get_variant_type(record):
         return 'Insertion'
     elif all(len(alt) < len(ref) for alt in alts):
         return 'Deletion'
+    elif all(len(record.REF) > 1 and len(alt) > 1 for alt in alts): # Substitution
+        return "Substitution"
     elif any(len(alt) != len(ref) for alt in alts):
         return 'Complex'
     else:
