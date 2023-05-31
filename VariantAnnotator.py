@@ -107,7 +107,7 @@ def get_variant_annotations(variant_id):
             annotations = [gene, variant_effect, minor_allele_frequency, additional_annotations]
 
     except ValueError:
-        print(f"Error decoding JSON for {hgvs}: {response.content}, HTTP status code: {response.status_code}")
+        print(f"Error decoding JSON for {variant_id}: {response.content}, HTTP status code: {response.status_code}")
         return []
 
     return annotations
