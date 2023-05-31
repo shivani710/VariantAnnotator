@@ -11,6 +11,7 @@ Variant Annotator is a Python script designed to annotate genetic variants in a 
 - [Output](#output)
 - [FAQs](#faqs)
 - [Troubleshooting](#troubleshooting)
+- [Authors](#Authors)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -68,6 +69,10 @@ Please see the FAQ.md file for frequently asked questions.
 ## Troubleshooting
 
 If you experience any issues while running the script, please check the error message in the console. You can also raise an issue in the GitHub repository with the full error message and the input data that caused it.
+
+## Authors
+
+* Shivani Nanda - [GitHub](https://github.com/shivani710)
 
 ## Contributing
 
