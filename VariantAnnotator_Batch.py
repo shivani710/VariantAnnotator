@@ -2,11 +2,15 @@ import vcf
 import csv
 import requests
 import os
+import logging
 from concurrent import futures
 
 # Setting Base Directory
 Base_Dir = '.'
 os.chdir(Base_Dir)
+
+# Configure logging
+logging.basicConfig(filename='annotation.log', level=logging.ERROR)
 
 def calculate_read_depth(record):
     """
@@ -50,31 +54,36 @@ def annotate_variant(record):
     """
     Annotate a single variant with the required information.
     """
-    alt = str(record.ALT[0])
-    if len(record.REF) == 1 and len(alt) == 1: # SNP or SNV
-        hgvs = f"{record.CHROM}:g.{record.POS}{record.REF}>{alt}"
-    elif len(record.REF) > 1 and len(alt) == 1: # Deletion
-        start = record.POS + 1
-        end = record.POS + len(record.REF) - 1
-        hgvs = f"{record.CHROM}:g.{start}_{end}del"
-    elif len(record.REF) == 1 and len(alt) > 1: # Insertion
-        hgvs = f"{record.CHROM}:g.{record.POS}_{record.POS+1}ins{alt[1:]}"
-    elif len(record.REF) > 1 and len(alt) > 1: # Substitution
-        start = record.POS + 1
-        end = record.POS + len(record.REF) - 1
-        hgvs = f"{record.CHROM}:g.{start}_{end}delins{alt[1:]}"
-    else: # Some complex variant
-        hgvs = "Complex variant, not converted to HGVS"
-    variant_id = hgvs
-    depth_of_coverage = calculate_read_depth(record)
-    supporting_reads = int(record.INFO.get('NR', 0)[0])
-    reference_reads = int(record.INFO.get('TC', 0))
-    percentage_supporting_reads = calculate_percentage_supporting_reads(supporting_reads, reference_reads)
-    variant_type = get_variant_type(record)
-    # Retrieve variant annotations from VEP HGVS API
-    annotations = get_variant_annotations(hgvs)
+    try:
+        alt = str(record.ALT[0])
+        if len(record.REF) == 1 and len(alt) == 1: # SNP or SNV
+            hgvs = f"{record.CHROM}:g.{record.POS}{record.REF}>{alt}"
+        elif len(record.REF) > 1 and len(alt) == 1: # Deletion
+            start = record.POS + 1
+            end = record.POS + len(record.REF) - 1
+            hgvs = f"{record.CHROM}:g.{start}_{end}del"
+        elif len(record.REF) == 1 and len(alt) > 1: # Insertion
+            hgvs = f"{record.CHROM}:g.{record.POS}_{record.POS+1}ins{alt[1:]}"
+        elif len(record.REF) > 1 and len(alt) > 1: # Substitution
+            start = record.POS + 1
+            end = record.POS + len(record.REF) - 1
+            hgvs = f"{record.CHROM}:g.{start}_{end}delins{alt[1:]}"
+        else: # Some complex variant
+            hgvs = "Complex variant, not converted to HGVS"
+        variant_id = hgvs
+        depth_of_coverage = calculate_read_depth(record)
+        supporting_reads = int(record.INFO.get('NR', 0)[0])
+        reference_reads = int(record.INFO.get('TC', 0))
+        percentage_supporting_reads = calculate_percentage_supporting_reads(supporting_reads, reference_reads)
+        variant_type = get_variant_type(record)
+        # Retrieve variant annotations from VEP HGVS API
+        annotations = get_variant_annotations(hgvs)
+
+        return [variant_id, depth_of_coverage, supporting_reads, percentage_supporting_reads, variant_type] + annotations
     
-    return [variant_id, depth_of_coverage, supporting_reads, percentage_supporting_reads, variant_type] + annotations
+    except Exception as e:
+        logging.error(f"Error annotating variant at position {record.POS}: {str(e)}")
+        return None
 
 def get_variant_annotations(hgvs):
     url = f"https://rest.ensembl.org/vep/human/hgvs/{hgvs}?"
@@ -83,23 +92,27 @@ def get_variant_annotations(hgvs):
         "Content-Type": "application/json"
     }
     
-    response = requests.get(url, headers=headers)
-    response_data = response.json()
-    
-    annotations = []
-    
-    if isinstance(response_data, list) and len(response_data) > 0:
-        variant_data = response_data[0]
-#         print("response data is: {}".format(response_data))
-        gene = variant_data.get('transcript_consequences', [{}])[0].get('gene_symbol', '')
-#         variant_class = variant_data.get('transcript_consequences', [{}])[0].get('biotype', [''])
-        variant_effect = variant_data.get('most_severe_consequence', '')
-        minor_allele_frequency = variant_data.get('gnomad_AF', '')
-        additional_annotations = variant_data.get('colocated_variants', [{}])[0].get('clin_sig', '')
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        response_data = response.json()
 
-        annotations = [gene, variant_effect, minor_allele_frequency, additional_annotations]
-    
-    return annotations
+        annotations = []
+
+        if isinstance(response_data, list) and len(response_data) > 0:
+            variant_data = response_data[0]
+            gene = variant_data.get('transcript_consequences', [{}])[0].get('gene_symbol', '')
+            variant_effect = variant_data.get('most_severe_consequence', '')
+            minor_allele_frequency = variant_data.get('gnomad_AF', '')
+            additional_annotations = variant_data.get('colocated_variants', [{}])[0].get('clin_sig', '')
+
+            annotations = [gene, variant_effect, minor_allele_frequency, additional_annotations]
+
+        return annotations
+
+    except Exception as e:
+        logging.error(f"Error retrieving variant annotations for HGVS notation {hgvs}: {str(e)}")
+        return []
 
 def annotate_variants(vcf_file, output_file, delimiter=','):
     """
@@ -116,12 +129,12 @@ def annotate_variants(vcf_file, output_file, delimiter=','):
 
         def process_record(record):
             variant_annotation = annotate_variant(record)
-            writer.writerow(variant_annotation)
+            if variant_annotation is not None:
+                writer.writerow(variant_annotation)
 
         # Use multithreading to parallelize the annotation process
         with futures.ThreadPoolExecutor() as executor:
             executor.map(process_record, vcf_reader)
 
-
-
 annotate_variants('test_vcf_data.txt', 'AnnotatedVariants_Batch.csv', delimiter=',')
+
