@@ -7,7 +7,7 @@ The Variant Annotator is a sophisticated software tool designed for bioinformati
 - [Dependencies](#dependencies)
 - [Features](#Features)
 - [Usage](#Usage)
-- [Detailed Functionality](#DetailedFunctionality)
+- [Detailed Functionality](#detailed-functionality)
 - [Output](#output)
 - [FAQs](#faqs)
 - [Authors](#Authors)
