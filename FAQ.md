@@ -16,36 +16,36 @@
 
 **A4: If the script reports an error, first check that your input VCF file is correctly formatted and that your internet connection is working. If the issue persists, you can open an issue on the GitHub repository with a description of the error and the input data that caused it.**
 
-## Q4: The script is running slowly. How can I improve the performance?
-**A4: The performance of the script is largely dependent on the number of variants in your input VCF file and the response time of the VEP API. To improve performance, you might consider running the script on a more powerful machine or splitting your input VCF file into smaller chunks and running the script on each chunk separately.*
+## Q5: The script is running slowly. How can I improve the performance?
+**A5: The performance of the script is largely dependent on the number of variants in your input VCF file and the response time of the VEP API. To improve performance, you might consider running the script on a more powerful machine or splitting your input VCF file into smaller chunks and running the script on each chunk separately.
 
-## Q5: What are the prerequisites to run this tool?
+## Q6: What are the prerequisites to run this tool?
 
-**A5:** The tool requires Python3 and two Python libraries - PyVCF and Requests. Moreover, a properly formatted VCF file with the necessary fields is required for annotation.
+**A6:** The tool requires Python3 and two Python libraries - PyVCF and Requests. Moreover, a properly formatted VCF file with the necessary fields is required for annotation.
 
-## Q6: How can I run this tool?
+## Q7: How can I run this tool?
 
-**A6:** Once you have all the prerequisites, set your working directory to the location where your VCF file is stored. Then invoke the `annotate_variants` function in the script with your input VCF file and output CSV file names. Your annotated data will be written to the output CSV file.
+**A7:** Once you have all the prerequisites, set your working directory to the location where your VCF file is stored. Then invoke the `annotate_variants` function in the script with your input VCF file and output CSV file names. Your annotated data will be written to the output CSV file.
 
-## Q7: I have a large VCF file. How can I speed up the annotation process?
+## Q8: I have a large VCF file. How can I speed up the annotation process?
 
-**A7:** As of now, the script doesn't support parallel processing. However, future versions of the script will handle parallel processing of VCF files for faster annotation.
+**A8:** As of now, the script doesn't support parallel processing. However, future versions of the script will handle parallel processing of VCF files for faster annotation.
 
-## Q8: I am facing a problem while running the script. How can I seek help?
+## Q9: I am facing a problem while running the script. How can I seek help?
 
-**A8:** If you encounter any problems or bugs, please open an issue on the GitHub repository explaining the problem in detail. Include as much information as possible, such as Python version, error messages, and input data format. 
+**A9:** If you encounter any problems or bugs, please open an issue on the GitHub repository explaining the problem in detail. Include as much information as possible, such as Python version, error messages, and input data format. 
 
-## Q9: I have a suggestion for improvement or new feature. How can I contribute?
+## Q10: I have a suggestion for improvement or new feature. How can I contribute?
 
-**A9:** We welcome contributions! Please refer to our contribution guidelines on [ReadMe](README.md) for details on how to contribute to this project.
+**A10:** We welcome contributions! Please refer to our contribution guidelines on [ReadMe](README.md) for details on how to contribute to this project.
 
-## Q10: How does the tool determine the variant type?
+## Q11: How does the tool determine the variant type?
 
-**A10:** The tool determines the variant type based on the reference (REF) and alternate (ALT) alleles. For example, if the length of the REF is 1 and the length of all ALT alleles is 1, the variant is classified as a Single Nucleotide Variant (SNV).
+**A11:** The tool determines the variant type based on the reference (REF) and alternate (ALT) alleles. For example, if the length of the REF is 1 and the length of all ALT alleles is 1, the variant is classified as a Single Nucleotide Variant (SNV).
 
-## Q11: What kind of annotations does the tool add to the variants?
+## Q12: What kind of annotations does the tool add to the variants?
 
-**A11:** The tool enriches the variants with several annotations, including gene symbol, most severe consequence, minor allele frequency, and additional annotations from the VEP REST API. It also computes depth of sequence coverage, number of supporting reads, percentage of supporting reads, and variant type.
+**A12:** The tool enriches the variants with several annotations, including gene symbol, most severe consequence, minor allele frequency, and additional annotations from the VEP REST API. It also computes depth of sequence coverage, number of supporting reads, percentage of supporting reads, and variant type.
 
 ## Q10: What is the output format of the tool?
 
