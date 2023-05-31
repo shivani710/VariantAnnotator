@@ -30,11 +30,11 @@ This comprehensive toolkit comes with several advanced features that facilitate 
 1. **Depth of Coverage Calculation**: It calculates the read depth for each variant by summing the forward and reverse strand coverage in Variant_Annotator.py. 
 Alternatively, in Variant_Annotator_Batch.py, the estimated depth of coverage is calculated using the formula:
 
-Read Depth (DP) = TCF + NR
+*   Read Depth (DP) = TCF + NR
 
-The Total forward strand coverage (TCF) represents the coverage specifically from the forward strand, while the Total number of reverse reads (NR) represents the coverage from the reverse strand containing the variant. Adding these two values together provides an estimate of the read depth at the given locus.
+*   The Total forward strand coverage (TCF) represents the coverage specifically from the forward strand, while the Total number of reverse reads (NR) represents the coverage from the reverse strand containing the variant. Adding these two values together provides an estimate of the read depth at the given locus.
 
-It's important to note that this is an estimation and may not be as accurate as having the actual DP value. The DP value represents the total read depth and is the preferred and more accurate measure when available.
+*   It's important to note that this is an estimation and may not be as accurate as having the actual DP value. The DP value represents the total read depth and is the preferred and more accurate measure when available.
 
 2. **Supporting Reads Percentage**: It computes the percentage of reads supporting the variant versus the total reads.
 
